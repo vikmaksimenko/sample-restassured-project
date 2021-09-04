@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Full test suite">
+  <test name="Non Functional Tests">
+    <packages>
+      <package name="com.vmaksymenko.nonfunctional.*"/>
+    </packages>
+  </test>
+  <test name="Functional Tests">
+    <packages>
+      <package name="com.vmaksymenko.functional.*"/>
+    </packages>
+  </test>
+</suite>
