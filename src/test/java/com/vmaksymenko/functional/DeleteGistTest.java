@@ -1,8 +1,6 @@
 package com.vmaksymenko.functional;
 
 import static io.restassured.RestAssured.given;
-import static utils.RequestSpecsProvider.authenticatedSpec;
-import static utils.RequestSpecsProvider.defaultSpec;
 
 import data.Gist;
 import data.GistFile;
@@ -11,6 +9,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utils.GistApiUtils;
+import utils.RequestSpecsProvider;
 import utils.StringUtils;
 
 public class DeleteGistTest {
@@ -34,14 +33,14 @@ public class DeleteGistTest {
   public void unauthenticatedUserCanNotDeleteGistTest() {
     // @formatter:off
     given()
-        .spec(defaultSpec())
+        .spec(RequestSpecsProvider.getInstance().getDefaultSpec())
     .when()
         .delete("/gists/{gist_id}", gistId)
     .then()
         .assertThat().statusCode(404);
 
     given()
-        .spec(defaultSpec())
+        .spec(RequestSpecsProvider.getInstance().getDefaultSpec())
     .when()
         .get("/gists/{gist_id}", gistId)
     .then()
@@ -53,18 +52,11 @@ public class DeleteGistTest {
   public void authenticatedUserDeletesHisGistTest() {
     // @formatter:off
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
     .when()
         .delete("/gists/{gist_id}", gistId)
     .then()
         .assertThat().statusCode(204);
-
-    given()
-        .spec(authenticatedSpec())
-    .when()
-        .get("/gists/{gist_id}", gistId)
-    .then()
-        .assertThat().statusCode(404);
     // @formatter:on
   }
 
@@ -76,14 +68,14 @@ public class DeleteGistTest {
   public void authenticatedUserDeletesAnotherUsersGistTest() {
     // @formatter:off
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
     .when()
         .delete("/gists/27f0d7084fab24421d46fbc327dcc513")
     .then()
         .assertThat().statusCode(404);
 
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
     .when()
         .get("/gists/4037120be76060bcfd59f72507f96ea8")
     .then()

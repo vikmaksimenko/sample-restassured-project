@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Full test suite">
+<suite name="Full test suite" parallel="methods" thread-count="10">
   <test name="Non Functional Tests">
     <packages>
       <package name="com.vmaksymenko.nonfunctional.*"/>

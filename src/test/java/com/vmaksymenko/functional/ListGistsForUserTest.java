@@ -4,8 +4,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
 import static utils.EnvReader.getUser;
-import static utils.RequestSpecsProvider.authenticatedSpec;
-import static utils.RequestSpecsProvider.defaultSpec;
 
 import data.Gist;
 import data.GistFile;
@@ -15,6 +13,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.DateUtils;
 import utils.GistApiUtils;
+import utils.RequestSpecsProvider;
 import utils.ResponseSpecsProvider;
 import utils.StringUtils;
 
@@ -54,7 +53,7 @@ public class ListGistsForUserTest {
   public void unauthenticatedUserReadsPublicUsersGistsTest() {
     // @formatter:off
     given()
-        .spec(defaultSpec())
+        .spec(RequestSpecsProvider.getInstance().getDefaultSpec())
     .when()
         .get("/users/{username}/gists", getUser())
     .then()
@@ -70,7 +69,7 @@ public class ListGistsForUserTest {
   public void authenticatedUserReadsAllHisGistsTest() {
     // @formatter:off
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
     .when()
         .get("/users/{username}/gists", getUser())
     .then()
@@ -87,7 +86,7 @@ public class ListGistsForUserTest {
   public void filterByUpdateTest() {
     // @formatter:off
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
         .param("since", timestamp)
     .when()
         .get("/users/{username}/gists", getUser())

@@ -3,8 +3,6 @@ package com.vmaksymenko.functional;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static utils.RequestSpecsProvider.authenticatedSpec;
-import static utils.RequestSpecsProvider.defaultSpec;
 
 import data.Gist;
 import data.GistFile;
@@ -15,6 +13,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utils.GistApiUtils;
+import utils.RequestSpecsProvider;
 import utils.ResponseSpecsProvider;
 import utils.StringUtils;
 
@@ -38,7 +37,7 @@ public class CreateGistTest {
   public void unauthenticatedUserCreatesGistTest() {
     // @formatter:off
     given()
-        .spec(defaultSpec())
+        .spec(RequestSpecsProvider.getInstance().getDefaultSpec())
         .body(gist)
     .when()
         .post("/gists")
@@ -52,7 +51,7 @@ public class CreateGistTest {
     // @formatter:off
     Response response =
         given()
-            .spec(authenticatedSpec())
+            .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
             .body(gist)
         .when()
             .post("/gists")
@@ -63,17 +62,6 @@ public class CreateGistTest {
             .and().spec(ResponseSpecsProvider.gistFileResponseSpec(gistFile))
         .extract()
             .response();
-
-    gistId = response.path("id");
-
-    given()
-        .spec(authenticatedSpec())
-    .when()
-        .get("/gists/{gist_id}", gistId)
-    .then()
-        .assertThat().statusCode(200)
-        .and().spec(ResponseSpecsProvider.gistResponseSpec(gist))
-        .and().spec(ResponseSpecsProvider.gistFileResponseSpec(gistFile));
     // @formatter:on
   }
 
@@ -81,7 +69,7 @@ public class CreateGistTest {
   public void canNotCreateGistWithoutFilesTest() {
     // @formatter:off
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
         .body(new HashMap<>())
     .when()
         .post("/gists")

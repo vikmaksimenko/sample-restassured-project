@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static utils.EnvReader.getUser;
-import static utils.RequestSpecsProvider.authenticatedSpec;
 
 import data.Gist;
 
@@ -15,7 +14,7 @@ public class GistApiUtils {
     // @formatter:off
     return
         given()
-            .spec(authenticatedSpec())
+            .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
             .body(gist)
         .when()
             .post("/gists")
@@ -31,7 +30,7 @@ public class GistApiUtils {
   public static void deleteGist(String gistId) {
     // @formatter:off
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
     .when()
         .delete("/gists/{gist_id}", gistId)
     .then()
@@ -42,7 +41,7 @@ public class GistApiUtils {
   public static void cleanupGists() {
     // @formatter:off
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
         .param("per_page", "100")
     .when()
         .get(" /users/{user}/gists", getUser())

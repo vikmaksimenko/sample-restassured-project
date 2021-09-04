@@ -3,9 +3,12 @@ package com.vmaksymenko.nonfunctional;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static utils.EnvReader.getUser;
-import static utils.RequestSpecsProvider.authenticatedSpec;
 
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+import utils.GistApiUtils;
+import utils.RequestSpecsProvider;
 
 public class RateLimitingQuotasTest {
 
@@ -14,7 +17,7 @@ public class RateLimitingQuotasTest {
     // @formatter:off
     int used =
         given()
-            .spec(authenticatedSpec())
+            .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
         .when()
             .get("rate_limit")
         .then()
@@ -23,14 +26,14 @@ public class RateLimitingQuotasTest {
             .path("resources.core.used");
 
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
     .when()
         .get("/users/{username}/gists", getUser())
     .then()
         .assertThat().statusCode(200);
 
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
     .when()
         .get("rate_limit")
     .then()

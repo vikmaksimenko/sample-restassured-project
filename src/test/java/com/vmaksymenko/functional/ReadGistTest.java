@@ -1,8 +1,6 @@
 package com.vmaksymenko.functional;
 
 import static io.restassured.RestAssured.given;
-import static utils.RequestSpecsProvider.authenticatedSpec;
-import static utils.RequestSpecsProvider.defaultSpec;
 
 import data.Gist;
 import data.GistFile;
@@ -11,6 +9,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.GistApiUtils;
+import utils.RequestSpecsProvider;
 import utils.ResponseSpecsProvider;
 import utils.StringUtils;
 
@@ -41,7 +40,7 @@ public class ReadGistTest {
   public void unauthenticatedUserReadsPublicGistTest() {
     // @formatter:off
     given()
-        .spec(defaultSpec())
+        .spec(RequestSpecsProvider.getInstance().getDefaultSpec())
     .when()
         .get("/gists/{gist_id}", publicGistId)
     .then()
@@ -64,7 +63,7 @@ public class ReadGistTest {
   public void unauthenticatedUserCanNotReadPrivateGistTest() {
     // @formatter:off
     given()
-        .spec(defaultSpec())
+        .spec(RequestSpecsProvider.getInstance().getDefaultSpec())
     .when()
         .get("/gists/{gist_id}", privateGistId)
     .then()
@@ -78,7 +77,7 @@ public class ReadGistTest {
   public void authenticatedUserCreatesGistTest() {
     // @formatter:off
     given()
-        .spec(authenticatedSpec())
+        .spec(RequestSpecsProvider.getInstance().getAuthenticatedSpec())
     .when()
         .get("/gists/{gist_id}", privateGistId)
     .then()

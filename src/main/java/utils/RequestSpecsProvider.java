@@ -9,26 +9,35 @@ import io.restassured.specification.RequestSpecification;
 
 public class RequestSpecsProvider {
 
-  private static RequestSpecification defaultSpec;
-  private static RequestSpecification authenticatedSpec;
+  private RequestSpecification defaultSpec;
+  private RequestSpecification authenticatedSpec;
 
-  static {
+  private static RequestSpecsProvider self = null;
+
+  private RequestSpecsProvider() {
     RestAssured.baseURI = "https://api.github.com";
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 
     initSpecs();
-    GistApiUtils.cleanupGists();
+//    GistApiUtils.cleanupGists();
   }
 
-  public static RequestSpecification defaultSpec() {
+  public static RequestSpecsProvider getInstance() {
+    if (self == null) {
+      self = new RequestSpecsProvider();
+    }
+    return self;
+  }
+
+  public RequestSpecification getDefaultSpec() {
     return defaultSpec;
   }
 
-  public static RequestSpecification authenticatedSpec() {
+  public RequestSpecification getAuthenticatedSpec() {
     return authenticatedSpec;
   }
 
-  private static void initSpecs() {
+  private void initSpecs() {
     defaultSpec = new RequestSpecBuilder()
         .addHeader("Accept", "application/vnd.github.v3+json")
         .build();
