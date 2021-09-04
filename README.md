@@ -30,4 +30,3 @@ docker run -it --rm --name my-maven-project -v "$(pwd)":/usr/src/mymaven -w /usr
 Some checks might be excessive for assessment, however, they should be mentioned:
 
 * Add JSON Schema validation
-* Run tests in parallel (tried doing this, but failed with BeforeMethods, will have to investigate)
