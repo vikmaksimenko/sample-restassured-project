@@ -25,6 +25,22 @@ GITHUB_USER and GITHUB_TOKEN env variables
 docker run -it --rm --name my-maven-project -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven -e GITHUB_TOKEN=${GITHUB_TOKEN} -e GITHUB_USER=${GITHUB_USER} maven:3.3-jdk-8 mvn clean test
 ```
 
+## Getting test run report 
+
+The project uses Allure reporting tool.
+
+1. Build the reports to temp folder and view:
+```
+mvn allure:serve
+```
+2. Build reports and save to target/site
+```
+mvn allure:report
+```
+
+Also, you may use [Allure commandline tool](https://docs.qameta.io/allure/#_get_started). 
+The report files will be placed to `target/allure-results` forlder  
+
 ## Improvements
 
 Some checks might be excessive for assessment, however, they should be mentioned:
